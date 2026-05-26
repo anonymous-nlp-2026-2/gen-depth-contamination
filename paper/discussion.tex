@@ -9,14 +9,21 @@
 
 \paragraph{One-wash laundering (web text).}
 For general web text, $\Kempirical{=}2$ reflects concentrated information loss: 0v1 is near-trivially separable ($\auc \geq 0.92$), 1v2 drops by ${\sim}$30\,pp, and 2v3 falls below $\theta$.
-Converging evidence supports a data-intrinsic interpretation: OBD achieves 96\% depth-0 recall but only 14--22\% for depths $\geq$2; frontier LLMs show 8--38\% ($p > 0.05$ vs.\ OBD; Table~\ref{tab:s3_llm_zeroshot}).
+OBD achieves 94\% depth-0 recall but only 15--23\% for depths $\geq$2; frontier LLMs show 8--38\% ($p > 0.05$ vs.\ OBD; Table~\ref{tab:s3_llm_zeroshot}; per-depth breakdown in Table~\ref{tab:s3c_perdepth}), which supports a data-intrinsic interpretation.
 Unlike model collapse~\cite{shumailov2024collapse}, one-wash laundering describes erasure of statistical fingerprints; quality may degrade further after features become indistinguishable.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig_filtering_strategies.pdf}
+\caption{MMLU accuracy under six filtering strategies (5 seeds, $\pm$1 std). Binary $\Kstar$ filtering (red) minimizes degradation; graduated weighting converges toward binary as $\alpha$ increases. Dashed line: no-filter baseline.}
+\label{fig:filtering_strategies}
+\end{figure}
+
 \paragraph{Boundary cases and representation dependence.}
-Four configurations yield $\Kempirical{=}1$; under Bonferroni correction (Table~\ref{tab:bonferroni_ci}), three of six $\Kempirical{=}2$ cases become marginal (CI lower 0.593--0.599), though the universal bound $\Kempirical \leq 2$ holds across $\theta \in [0.59, 0.61]$ (Figure~\ref{fig:kstar_theta}).
-$\Kempirical$ is representation-dependent: neural probes yield $\Kempirical^{\text{neural}} \in \{1,2,3\}$ across models (Table~\ref{tab:neural_probe_crossmodel}); a DeBERTa upper-bound probe extends to $\Kempirical{=}4$ on arXiv (Table~\ref{tab:deberta_vs_obd}), placing the cost of generator-agnostic features at one depth level.
+Under Bonferroni correction (Table~\ref{tab:bonferroni_ci}), three of six $\Kempirical{=}2$ cases become marginal (CI lower 0.593--0.599), though $\Kempirical \leq 2$ holds across $\theta \in [0.59, 0.61]$ (Figure~\ref{fig:kstar_theta}).
+$\Kempirical$ is representation-dependent: neural probes yield $\Kempirical^{\text{neural}} \in \{1,2,3\}$ (Table~\ref{tab:neural_probe_crossmodel}); a DeBERTa probe extends to $\Kempirical{=}4$ on arXiv (Table~\ref{tab:deberta_vs_obd}).
 
 \paragraph{Domain dependence and scope.}
-arXiv yields $\Kempirical{=}3$ across four families (Figure~\ref{fig:jsd_decay}), driven by larger per-generation JSD ($0.077$ vs.\ ${\sim}0.01$ for C4); markup removal preserves $\Kempirical{=}3$ ($\Delta\auc = {-}0.021$).
-Retrain-chain experiments yield $\Kempirical{\geq}4$ because retraining modifies model parameters; prompt-chain $\Kempirical$ isolates text-intrinsic degradation.
+arXiv yields $\Kempirical{=}3$ across four families (Figure~\ref{fig:jsd_decay}), driven by larger per-generation JSD ($0.077$ vs.\ ${\sim}0.01$ for C4; $\Delta\auc = {-}0.021$ after markup removal).
+Retrain-chain experiments yield $\Kempirical{\geq}4$; prompt-chain $\Kempirical$ isolates text-intrinsic degradation from training-loop effects.
 

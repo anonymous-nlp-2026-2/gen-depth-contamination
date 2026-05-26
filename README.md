@@ -25,8 +25,8 @@ paper/                         # LaTeX source files
 ├── main.tex
 ├── introduction.tex
 ├── method.tex
-├── experiments_c1.tex         # Core experiments (Chapter 1)
-├── experiments_c3.tex         # Extended experiments (Chapter 3)
+├── experiments_c1.tex         # Experiments (discrimination boundary, transfer, domain)
+├── experiments_c3.tex         # K*-Guided Filtering (consistency check)
 ├── related_work.tex
 ├── discussion.tex
 ├── conclusion.tex

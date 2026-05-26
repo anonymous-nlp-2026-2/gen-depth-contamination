@@ -12,7 +12,7 @@ This appendix provides supplementary figures, detailed experimental tables, data
 \paragraph{Feature ranking and cross-model consistency.}
 Table~\ref{tab:top_features} reports per-model single-feature AUC rankings.
 Surprisal derivative features (\texttt{surp\_d1\_std}, \texttt{surp\_d2\_std}) consistently rank among the top three across all continuation-mode models (Pythia, OLMo, Qwen-cont), with pairwise Spearman $\rho \geq 0.85$.
-The rewrite-mode model (Qwen-rw) diverges by placing \texttt{freq\_entropy} first, reflecting a distributional shift that is lexical rather than surprisal-driven.
+The rewrite-mode model (Qwen-rw) diverges by placing \texttt{freq\_entropy} first; this reflects a distributional shift that is lexical rather than surprisal-driven.
 This scorer-invariant ranking supports the use of a fixed 15-dimensional feature set across generators without per-model feature selection.
 
 %%% Feature ranking table (moved from main text)
@@ -36,7 +36,7 @@ Rank & Pythia & OLMo & Qwen-rw & Qwen-cont \\
 
 Table~\ref{tab:s1_transfer} reports the cross-model transfer accuracy matrix.
 Classifiers trained on continuation-mode generators (Pythia, OLMo, Qwen-cont) transfer well to each other, with off-diagonal accuracy retaining 80--92\% of in-distribution performance.
-Rewrite-mode classifiers transfer at 61--63\% to other architectures but retain 82\% within Qwen, confirming that generation mode is the primary axis of distributional variation while a Qwen-specific artifact component persists (Section~\ref{sec:discussion}).
+Rewrite-mode classifiers transfer at 61--63\% to other architectures but retain 82\% within Qwen; generation mode is the primary axis of distributional variation, while a Qwen-specific artifact component persists (Section~\ref{sec:discussion}).
 
 %%% Table S1: Cross-Transfer Confusion Matrix (exp-013)
 \begin{table}[!htbp]
@@ -59,7 +59,7 @@ Rewrite-mode classifiers transfer at 61--63\% to other architectures but retain 
 
 \paragraph{Dataset construction.}
 Table~\ref{tab:s4_dataset_stats} summarizes the generational depth corpus.
-Each depth level contains 5{,}000 passages, yielding 30{,}000 total samples across six depths (0--5).
+Each depth level contains 5{,}000 passagesfor a total of 30{,}000 samples across six depths (0--5).
 Depth~0 consists of human-written seed texts from the C4 English validation split, truncated to 256 subword tokens.
 Subsequent depths are generated recursively: each depth-$k$ passage is produced by prompting the generator with the corresponding depth-$(k{-}1)$ passage.
 All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, Qwen2.5-1.5B base, Qwen2.5-7B, Pythia-1.4B, OLMo-1B; Table~\ref{tab:setup}) share identical depth-0 seeds, differing only in generator model, scale, and prompting strategy.
@@ -87,6 +87,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
   \end{tabular}}
 \end{table}
 
+\FloatBarrier
 %%% Table S2: Decoding Ablation AUC (exp-003)
 \begin{table*}[t]
   \centering
@@ -98,7 +99,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
     \textbf{Depth Pair} & \textbf{Greedy} & \textbf{Nuc $p{=}0.9$, $T{=}1.0$} & \textbf{Nuc $p{=}0.95$, $T{=}0.7$} & \textbf{Nuc $p{=}0.95$, $T{=}1.2$} \\
     \midrule
     0 vs.\ 1 & $.980\;[.977,\,.982]$ & $.995\;[.993,\,.996]$ & $.988\;[.986,\,.990]$ & $.998\;[.998,\,.999]$ \\
-    1 vs.\ 2 & $.689\;[.680,\,.698]$ & $.687\;[.677,\,.695]$ & $.689\;[.680,\,.697]$ & $.704\;[.695,\,.713]$ \\
+    1 vs.\ 2 & $.689\;[.680,\,.698]$ & $.686\;[.677,\,.695]$ & $.689\;[.680,\,.697]$ & $.704\;[.695,\,.713]$ \\
     \cmidrule(lr){1-5}
     2 vs.\ 3 & $.561\;[.552,\,.571]$ & $.592\;[.582,\,.601]$\rlap{$^\dagger$} & $.590\;[.581,\,.600]$ & $.582\;[.572,\,.592]$ \\
     3 vs.\ 4 & $.540\;[.531,\,.550]$ & $.547\;[.537,\,.557]$ & $.539\;[.529,\,.549]$ & $.529\;[.519,\,.540]$ \\
@@ -133,7 +134,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
     \toprule
      & Qwen-rw & Pythia & OLMo & Qwen-cont & Qwen-7B$^\ddagger$ & Qwen-base & LLaMA-8B & Mistral-7B & Pythia-6.9B$^\S$ & Gemma-2B \\
     \midrule
-    0v1 & .9956 & .9722 & .9860 & .9971 & .9644\,[.961,.967] & .987\,[.985,.989] & .9224\,[.917,.927] & .9209\,[.919,.923] & .9599 & .953\,[.949,.957] \\
+    0v1 & .9956 & .9722 & .9861 & .9971 & .9644\,[.961,.967] & .987\,[.985,.989] & .9224\,[.917,.927] & .9209\,[.919,.923] & .9599 & .953\,[.949,.957] \\
     1v2 & \textbf{.6955}\,[.686,.704]$^*$ & \textbf{.6074}\,[.598,.617]$^*$ & .5001\,[.496,.519] & \textbf{.6112}\,[.602,.621]$^*$ & \textbf{.6178}\,[.608,.626]$^*$ & \textbf{.626}\,[.617,.635]$^*$ & \textbf{.6123}\,[.603,.622]$^*$ & .5695\,[.565,.575] & .5955 & .5981\,[.588,.608] \\
     2v3 & .5893\,[.580,.599] & .5440\,[.534,.554] & .4973\,[.486,.509] & .5609\,[.551,.571] & .5492\,[.539,.559] & .550\,[.540,.560] & .5273\,[.517,.538] & .5335\,[.528,.538] & .5298 & .534\,[.523,.545] \\
     3v4 & .5435 & .5051 & .5034 & .5409 & .5276 & .529\,[.519,.540] & .5168\,[.506,.528] & .5140 & .5135 & .5033\,[.492,.514] \\
@@ -146,11 +147,12 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
   \end{tabular}}% end resizebox
 \end{table*}
 
+\FloatBarrier
 %%% Table S3: LLM Zero-Shot Confusion Matrices (exp-011)
 \begin{table}[t]
   \centering
   \scriptsize
-  \caption{LLM zero-shot depth classification: $5{\times}5$ confusion matrices (Exp-011). Both frontier LLMs achieve high binary detection accuracy (GPT-5.5: 0.878; Claude Opus~4.6: 0.882) but near-chance 5-class accuracy (${\sim}$0.33 vs.\ OBD-LightGBM 0.386). Per-depth recall in Table~\ref{tab:s3c_perdepth}.}
+  \caption{LLM zero-shot depth classification: $5{\times}5$ confusion matrices. Both frontier LLMs achieve high binary detection accuracy (GPT-5.5: 0.878; Claude Opus~4.6: 0.882) but near-chance 5-class accuracy (${\sim}$0.33 vs.\ OBD-LightGBM 0.386). Per-depth recall in Table~\ref{tab:s3c_perdepth}.}
   \label{tab:s3_llm_zeroshot}
 
   \vspace{0.3em}
@@ -184,7 +186,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
     0 & \textbf{69} & 26 &  3 &  0 &  2 & .690 \\
     1 &  8 & \textbf{21} & 32 & 11 & 28 & .210 \\
     2 &  6 & 36 & \textbf{28} &  5 & 25 & .280 \\
-    3 &  7 & 20 & 31 & \textbf{10} & 31 & .100 \\
+    3 &  7 & 20 & 31 & \textbf{10} & 31 & .101 \\
     4 &  7 & 28 & 22 &  6 & \textbf{37} & .370 \\
     \bottomrule
   \end{tabular}
@@ -193,14 +195,14 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \begin{table}[t]
   \centering
   \small
-  \caption{Per-depth recall (\%) on balanced $N{=}500$ test set. OBD's nominal overall accuracy gap originates from depth-0; all methods fail at depths $\geq 2$, consistent with $\Kempirical = 2$.}
+  \caption{Per-depth recall (\%) on balanced test set ($N{=}500$ for GPT-5.5 and OBD; $N{=}499$ for Claude Opus~4.6 after one invalid response). OBD's nominal overall accuracy gap originates from depths 0--1; all methods fail at depths $\geq 2$, consistent with $\Kempirical = 2$.}
   \label{tab:s3c_perdepth}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{lccccc}
     \toprule
     & Depth 0 & Depth 1 & Depth 2 & Depth 3 & Depth 4 \\
     \midrule
-    OBD-LightGBM & \textbf{96} & \textbf{39} & 14 & 19 & 22 \\
+    OBD-LightGBM & \textbf{94} & \textbf{44} & 17 & 15 & 23 \\
     GPT-5.5      & 77 & 19 & \textbf{38} & \textbf{24} &  8 \\
     Claude Opus~4.6 & 69 & 21 & 28 & 10 & \textbf{37} \\
     \bottomrule
@@ -236,6 +238,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
   \end{tabular}}
 \end{table}
 
+\FloatBarrier
 %%% Table S5: Complete 15-D Feature Descriptions
 \begin{table*}[t]
   \centering
@@ -295,7 +298,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \begin{minipage}[t]{0.52\textwidth}
   \centering
   \small
-  \captionof{table}{Neural probe architecture and training details (Exp-015). Applied to all three model families (Qwen2.5-1.5B, Pythia-1.4B, OLMo-1B): each model's frozen hidden states are average-pooled into document embeddings and classified by a two-hidden-layer MLP.}
+  \captionof{table}{Neural probe architecture and training details. Applied to all three model families (Qwen2.5-1.5B, Pythia-1.4B, OLMo-1B): each model's frozen hidden states are average-pooled into document embeddings and classified by a two-hidden-layer MLP.}
   \label{tab:s7_neural_probe}
   \resizebox{\textwidth}{!}{%
   \begin{tabular}{ll}
@@ -327,8 +330,9 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \end{minipage}
 \end{table*}
 
+\FloatBarrier
 %%% Table S8: Per-Model Bootstrap CI Results (exp-007)
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \scriptsize
   \caption{Pairwise AUC with bootstrap 95\% CIs for four of six primary configurations (1{,}000 resamples). All boundary pairs ($\auc > \theta$) $p < 0.01$; OLMo 1v2--4v5 non-significant ($p > 0.09$).}
@@ -349,7 +353,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \end{table}
 
 %%% Table S9: Binary Detector Spearman ρ (exp-012)
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \scriptsize
   \caption{Spearman $\rho$ between binary detector scores and true depth, and 6-class accuracy. Correlations driven by 0v1; scores do not track depth beyond generation~1. Qwen-rw exhibits reversed sign ($\rho > 0$).}
@@ -371,7 +375,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \end{table}
 
 %%% Table S10: Pythia Decoding Ablation (exp-020)
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \scriptsize
   \caption{Pythia-1.4B pairwise $\auc$ under four decoding configs (10K bootstrap). $^\dagger$Greedy triggers repetition collapse (4-gram repeat: $d_0{=}0.01 \to d_1{=}0.72$).}
@@ -390,12 +394,12 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
     \midrule
     $\Kempirical$ & 2 & 2 & 2 & 2 \\
     \bottomrule
-    \multicolumn{5}{l}{${}^{\ddagger}$CI upper 0.606 $> \theta$; point est.\ below.} \\
+    \multicolumn{5}{l}{${}^{\ddagger}$CI upper 0.603 $> \theta$; point est.\ below.} \\
   \end{tabular}}
 \end{table}
 
 %%% Table S11: Length Ablation (exp-021)
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \small
   \caption{Pairwise $\auc$ for three segment lengths (Qwen-base, cont.\ mode). $\Kempirical{=}2$ at 128/256; 512 marginal ($^\dagger$CI lower $< \theta$).}
@@ -417,7 +421,7 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \end{table}
 
 %%% Table S12: Domain Ablation
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \small
   \caption{Pairwise $\auc$ for three text domains (Qwen-cont). arXiv yields $\Kempirical{=}3$; C4 and Wikipedia $\Kempirical{=}2$.}
@@ -440,10 +444,10 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
 \end{table}
 
 %%% Table S13: Scorer Sensitivity Analysis
-\begin{table}[t]
+\begin{table}[!htbp]
   \centering
   \scriptsize
-  \caption{Scorer sensitivity: $\Kempirical$ under self- vs.\ cross-scoring. Cross-scoring reduces $\Kempirical$ only for marginal Qwen-cont.}
+  \caption{Scorer sensitivity: $\Kempirical$ under self- vs.\ cross-scoring. ``Self'' denotes the standardized pipeline scorer (Qwen-1.5B for all generators); it does not mean a model scores its own generations. Cross-scoring reduces $\Kempirical$ only for marginal Qwen-cont.}
   \label{tab:s13_scorer_sensitivity}
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{llcccc}
@@ -461,4 +465,4 @@ All six primary configurations (Qwen2.5-1.5B-Instruct rewrite and continuation, 
   \end{tabular}}
 \end{table}
 
-\clearpage
+\FloatBarrier

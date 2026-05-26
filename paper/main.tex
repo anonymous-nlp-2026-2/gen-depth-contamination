@@ -1,5 +1,4 @@
-% EMNLP 2026 Main — ARR May 2026
-% Generational Depth Contamination
+% Generational Depth Estimation
 \documentclass[11pt]{article}
 \usepackage[review]{acl}
 \usepackage{times}
@@ -15,9 +14,8 @@
 \usepackage{multirow}
 \usepackage{enumitem}
 \usepackage{subcaption}
-\usepackage[section]{placeins}
+\usepackage{placeins}
 \usepackage{float}
-\raggedbottom
 
 \newcommand{\Kstar}{{K^*}}
 \newcommand{\Kempirical}{{K^*_{\text{empirical}}}}
@@ -36,11 +34,10 @@
 \begin{abstract}
 Web-scale corpora are increasingly contaminated by recursive synthetic content, yet no method estimates a document's generational depth.
 We measure a lower bound on the generational discrimination boundary, $\Kempirical$ (the maximum depth at which adjacent generations remain distinguishable).
-Under prompt-chain generation across 10 model configurations (6 architecture families, 1B--8B), 4 source domains, and 4 decoding strategies, $\Kempirical \leq 2$ for all web text configurations ($\theta{=}0.60$); structured academic text (arXiv) reaches $\Kempirical{=}3$ across four independent architecture families.
+Under prompt-chain generation across 10 model configurations (6 architecture families, 1B--8B), 4 source domains, and 4 decoding strategies, $\Kempirical \leq 2$ for all web text configurations (discrimination threshold $\theta{=}0.60$); structured academic text (arXiv) reaches $\Kempirical{=}3$ across four independent architecture families.
 Beyond two generation passes, web text becomes statistically indistinguishable across deeper generations, a \emph{one-wash laundering} effect that concentrates the dominant exploitable signal at the human-vs.-machine boundary.
-Across continuation-mode generators, generator-agnostic statistical features enable 80--92\% cross-model transfer with scorer-invariant feature rankings ($\rho > 0.90$), supporting depth estimation on corpora from unknown generators without retraining.
-Under extreme contamination (${\sim}$83\% synthetic), $\Kempirical$ correctly predicts that binary filtering outperforms graduated alternatives; at realistic ratios ($\leq$50\%), strategy differences remain below 0.3\,pp.
-We release our code and data at\footnote{\url{https://github.com/anonymous-nlp-2026-2/gen-depth-contamination}}.
+Across continuation-mode generators, generator-agnostic statistical features enable 80--92\% cross-model transfer with scorer-invariant feature rankings ($\rho > 0.90$); depth estimation on corpora from unknown generators requires no retraining.
+Under extreme contamination (${\sim}$83\% synthetic), $\Kempirical$ correctly predicts that binary filtering outperforms graduated alternatives; at realistic ratios ($\leq$50\%), strategy differences remain below 0.3\,pp\footnote{Code and data are available at \url{https://anonymous.4open.science/r/gen-depth-contamination-E6C1/}.}.
 \end{abstract}
 
 % === Section 1: Introduction ===
@@ -72,9 +69,14 @@ We release our code and data at\footnote{\url{https://github.com/anonymous-nlp-2
 (2)~\emph{Features}: the 15 statistical features provide a lower bound on $\Ktheory$; richer representations can extend $\Kempirical$ by one depth level, and cross-model transfer is validated only within continuation mode.
 (3)~\emph{Threshold and domain}: $\Kempirical$ varies with $\theta$ (2--3 at 0.55, 1 at 0.70; three of ten configurations are marginal at $\theta{=}0.60$), and arXiv $\Kempirical{=}3$ is established on a single structured domain.
 
+\section*{Ethical Considerations}
+
+This work develops tools for detecting recursive synthetic text contamination in training corpora.
+The depth estimation framework is intended for dataset curation and quality auditing, not for content moderation or individual authorship attribution.
+Our finding that web text becomes indistinguishable beyond two generation passes ($\Kempirical \leq 2$) has implications for data governance: it highlights a fundamental limit on provenance tracking using distributional features, which policymakers and dataset curators should consider when designing data pipelines.
+
 \bibliography{references}
 
-\clearpage
 \input{appendix}
 \input{appendix_extended}
 
